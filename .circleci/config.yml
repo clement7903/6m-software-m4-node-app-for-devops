@@ -55,7 +55,7 @@ jobs:
             docker push clement7903/container-assignment:latest
 
 workflows:
-  build-and-test:
+  build-test-deploy:
     jobs:
       - build
       - test:

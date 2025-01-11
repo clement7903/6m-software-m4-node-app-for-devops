@@ -77,10 +77,18 @@ jobs:
 workflows:
   build-test-publish:
     jobs:
-      - build
+      - build:
+        filters:
+          branches:
+            only:
+              - main
       - test:
           requires:
             - build
+          filters:
+            branches:
+              only:
+                - main
       - publish:
           requires:
             - test

@@ -2,7 +2,7 @@
 
 ## Brief
 
-Node application is lightweight and is easy to use as sample application for this DevOps module. Please read on to learn about the basic (Terminal) command to build, test and run a Node application.
+This repository is used as a sample Node application for CICD deployment using CircleCI. Any git commits to the branch - circleci-project-setup will trigger a CircleCI job based on the config.yml defined in the .circleci folder.
 
 ## Commands
 

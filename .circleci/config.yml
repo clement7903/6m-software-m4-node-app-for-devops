@@ -101,7 +101,8 @@ workflows:
           context: docker-hub-credentials
           filters:
             branches:
-              ignore: /.*/ # Ignore all branches
+              only:
+                - release
             tags:
               only: /^v\d+\.\d+\.\d+$/ # Run on Semantic Versioning tags
       - deploy:
@@ -109,6 +110,7 @@ workflows:
             - publish
           filters:
             branches:
-              ignore: /.*/ # Ignore all branches
+              only:
+                - release
             tags:
               only: /^v\d+\.\d+\.\d+$/ # Run on Semantic Versioning tags

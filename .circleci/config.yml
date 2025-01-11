@@ -77,22 +77,38 @@ jobs:
 workflows:
   build-test-publish:
     jobs:
-      - build
+      - build:
+        filters:
+          branches:
+            only:
+              - main
+              - release
+          tags:
+            only: /^v\d+\.\d+\.\d+$/ # Semantic Versioning tags
       - test:
           requires:
             - build
+          filters:
+            branches:
+              only:
+                - main
+                - release
+            tags:
+              only: /^v\d+\.\d+\.\d+$/ # Semantic Versioning tags
       - publish:
           requires:
             - test
           context: docker-hub-credentials
           filters:
             branches:
-              only:
-                - release
+              ignore: /.*/ # Ignore all branches
+            tags:
+              only: /^v\d+\.\d+\.\d+$/ # Run on Semantic Versioning tags
       - deploy:
           requires:
             - publish
           filters:
             branches:
-              only:
-                - release
+              ignore: /.*/ # Ignore all branches
+            tags:
+              only: /^v\d+\.\d+\.\d+$/ # Run on Semantic Versioning tags

@@ -77,22 +77,23 @@ jobs:
 workflows:
   build-test-publish:
     jobs:
-      - build:
-        filters:
-          branches:
-            only:
-              - main
+      - build
       - test:
           requires:
             - build
-          filters:
-            branches:
-              only:
-                - main
+
       - publish:
           requires:
             - test
           context: docker-hub-credentials
+          filters:
+            branches:
+              only:
+                - release
       - deploy:
           requires:
             - publish
+          filters:
+            branches:
+              only:
+                - release

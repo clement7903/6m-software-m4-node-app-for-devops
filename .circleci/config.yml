@@ -77,11 +77,24 @@ jobs:
 workflows:
   build-test-publish:
     jobs:
-      - build
+      - build:
+        filters:
+          branches:
+            only:
+              - main
+              - release
+          tags:
+            only: /^v\d+\.\d+\.\d+$/ # Semantic Versioning tags
       - test:
           requires:
             - build
-
+          filters:
+            branches:
+              only:
+                - main
+                - release
+            tags:
+              only: /^v\d+\.\d+\.\d+$/ # Semantic Versioning tags
       - publish:
           requires:
             - test
@@ -90,6 +103,8 @@ workflows:
             branches:
               only:
                 - release
+            tags:
+              only: /^v\d+\.\d+\.\d+$/ # Run on Semantic Versioning tags
       - deploy:
           requires:
             - publish
@@ -97,3 +112,5 @@ workflows:
             branches:
               only:
                 - release
+            tags:
+              only: /^v\d+\.\d+\.\d+$/ # Run on Semantic Versioning tags

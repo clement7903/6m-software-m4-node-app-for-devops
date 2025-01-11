@@ -30,7 +30,9 @@ jobs:
             - node-modules-{{ checksum "package-lock.json" }}
       - run:
           name: Run tests
-          command: npm run test --ci --runInBand --reporters=default --reporters=jest-junit
+          command: |
+            echo "Running tests"
+            npm run test --ci --runInBand --reporters=default --reporters=jest-junit
       - store_test_results:
           path: ./test-results/
       - store_artifacts:
@@ -46,10 +48,12 @@ jobs:
       - run:
           name: Login to Docker Hub
           command: |
+            echo "Logging in to Docker Hub"
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
       - run:
           name: Build and Push Docker Image
           command: |
+            echo "Building and Pushing Docker Image"
             docker build -t container-assignment:latest .
             docker tag container-assignment:latest clement7903/container-assignment:latest
             docker push clement7903/container-assignment:latest

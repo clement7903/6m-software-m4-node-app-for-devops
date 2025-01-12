@@ -53,6 +53,9 @@ jobs:
       version-tag:
         type: string
     steps:
+      - run:
+          name: Print Version Tag
+          command: echo "Version tag: << parameters.version-tag >>"
       - checkout
       - setup_remote_docker
       - run:
@@ -93,7 +96,7 @@ workflows:
                 - main
                 - release
             tags:
-              only: /^v\d+\.\d+\.\d+$/ # Semantic Versioning tags
+              only: /^v\d+\.\d+\.\d+$/
       - test:
           requires:
             - build
@@ -103,7 +106,7 @@ workflows:
                 - main
                 - release
             tags:
-              only: /^v\d+\.\d+\.\d+$/ # Semantic Versioning tags
+              only: /^v\d+\.\d+\.\d+$/
       - publish:
           requires:
             - test
@@ -113,9 +116,9 @@ workflows:
               only:
                 - release
             tags:
-              only: /^v\d+\.\d+\.\d+$/ # Run on Semantic Versioning tags
+              only: /^v\d+\.\d+\.\d+$/
           parameters:
-            version-tag: << pipeline.git.tag >>
+            version-tag: << pipeline.git.tag >> || "latest" # Fallback to "latest"
       - deploy:
           requires:
             - publish
@@ -124,4 +127,4 @@ workflows:
               only:
                 - release
             tags:
-              only: /^v\d+\.\d+\.\d+$/ # Run on Semantic Versioning tags
+              only: /^v\d+\.\d+\.\d+$/

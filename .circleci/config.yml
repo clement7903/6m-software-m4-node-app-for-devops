@@ -4,6 +4,11 @@ orbs:
   docker: circleci/docker@2.1.4
   heroku: circleci/heroku@2.0.0
 
+parameters:
+  version-tag:
+    type: string
+    default: "latest" # Default to "latest" if no version tag is provided
+
 jobs:
   build:
     # Install Node dependencies & cache them
@@ -41,9 +46,12 @@ jobs:
           path: ./test-results/
 
   publish:
-    # publish Steps
+    # Build and Push Docker Image
     docker:
       - image: cimg/base:stable
+    parameters:
+      version-tag:
+        type: string
     steps:
       - checkout
       - setup_remote_docker
@@ -55,10 +63,11 @@ jobs:
       - run:
           name: Build and Push Docker Image
           command: |
-            echo "Building and Pushing Docker Image"
-            docker build -t container-assignment:latest .
-            docker tag container-assignment:latest clement7903/container-assignment:latest
-            docker push clement7903/container-assignment:latest
+            echo "Building and Pushing Docker Image with tag << parameters.version-tag >>"
+            docker build -t container-assignment:<< parameters.version-tag >> .
+            docker tag container-assignment:<< parameters.version-tag >> clement7903/container-assignment:<< parameters.version-tag >>
+            docker push clement7903/container-assignment:<< parameters.version-tag >>
+
   deploy:
     docker:
       - image: cimg/node:16.10
@@ -78,13 +87,13 @@ workflows:
   build-test-publish:
     jobs:
       - build:
-        filters:
-          branches:
-            only:
-              - main
-              - release
-          tags:
-            only: /^v\d+\.\d+\.\d+$/ # Semantic Versioning tags
+          filters:
+            branches:
+              only:
+                - main
+                - release
+            tags:
+              only: /^v\d+\.\d+\.\d+$/ # Semantic Versioning tags
       - test:
           requires:
             - build
@@ -105,6 +114,8 @@ workflows:
                 - release
             tags:
               only: /^v\d+\.\d+\.\d+$/ # Run on Semantic Versioning tags
+          parameters:
+            version-tag: << pipeline.git.tag >>
       - deploy:
           requires:
             - publish

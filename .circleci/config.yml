@@ -7,7 +7,7 @@ orbs:
 parameters:
   version-tag:
     type: string
-    default: "latest" # Default to "latest" if no version tag is provided
+    default: "latest" # Default to "latest" if no version tag is provided, current is v1.0.1
 
 jobs:
   build:

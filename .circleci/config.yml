@@ -55,7 +55,7 @@ jobs:
     steps:
       - run:
           name: Print Version Tag
-          command: echo "Version tag: << parameters.version-tag >>"
+          command: echo "Version Tag << parameters.version-tag >>"
       - checkout
       - setup_remote_docker
       - run:

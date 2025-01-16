@@ -2,7 +2,13 @@
 
 ## Brief
 
-This repository is used as a sample Node application for CICD deployment using CircleCI. Any git commits to the branch - circleci-project-setup will trigger a CircleCI job based on the config.yml defined in the .circleci folder.
+This repository is used as a sample Node application for CICD deployment using CircleCI. There are 2 branches - main & development. Git commits to different branches yield different circleci jobs being triggered as defined in the config.yml defined in the .circleci folder.
+
+## External Services
+- Circleci (CICD Platform)
+- Synk (Vulnerability & Static Code Scan)
+- Dockerhub (Container Repository)
+- Heroku (Application Deployment Service)
 
 ## Commands
 

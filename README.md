@@ -12,6 +12,10 @@ This repository is used as a sample Node application for CICD deployment using C
 
 ## Commands
 
+### circleci config validate 
+
+The `circleci config validate ` command validates the config.yml file using the [local circleci CLI](https://circleci.com/docs/how-to-use-the-circleci-local-cli/#validate-a-circleci-config)
+
 ### npm install
 
 The `npm install` is the first command you will use to install all dependencies specified in the `package.json` file [here](./package.json).

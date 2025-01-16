@@ -9,6 +9,7 @@ This repository is used as a sample Node application for CICD deployment using C
 - Synk (Vulnerability & Static Code Scan)
 - Dockerhub (Container Repository)
 - Heroku (Application Deployment Service)
+- Gitguardian (Secrets Scan Service)
 
 ## Commands
 

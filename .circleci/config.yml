@@ -4,6 +4,7 @@ orbs:
   docker: circleci/docker@2.1.4
   heroku: circleci/heroku@2.0.0
   snyk: snyk/snyk@1.5.0
+  ggshield: gitguardian/ggshield@volatile
 
 jobs:
   build:
@@ -112,7 +113,7 @@ jobs:
             heroku container:release web -a clement-su-devops
 
 workflows:
-  build-test-publish:
+  build-test-scan-publish-deploy:
     jobs:
       - build:
         filters:
@@ -146,6 +147,10 @@ workflows:
           filters:
             branches:
               only: main
+      - ggshield/scan:
+          name: ggshield-scan
+          base_revision: <<pipeline.git.base_revision>>
+          revision: <<pipeline.git.revision>>
       - publish:
           requires:
             - test

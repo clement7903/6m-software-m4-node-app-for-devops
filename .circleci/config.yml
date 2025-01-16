@@ -149,6 +149,7 @@ workflows:
               only: main
       - ggshield/scan:
           name: ggshield-scan
+          context: docker-hub-credentials
           base_revision: <<pipeline.git.base_revision>>
           revision: <<pipeline.git.revision>>
       - publish:

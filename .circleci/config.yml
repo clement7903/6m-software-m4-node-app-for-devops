@@ -3,6 +3,7 @@ orbs:
   node: circleci/node@5
   docker: circleci/docker@2.1.4
   heroku: circleci/heroku@2.0.0
+  snyk: snyk/snyk@1.5.0
 
 jobs:
   build:
@@ -39,6 +40,38 @@ jobs:
           path: ./test-results/
       - store_artifacts:
           path: ./test-results/
+
+  scan:
+    docker:
+      - image: cimg/node:16.10
+    environment:
+      IMAGE_NAME: clement7903/container-assignment:latest
+    steps:
+      - checkout
+      - setup_remote_docker
+      - docker/check
+      - run:
+          name: Build Docker Image
+          command: docker build -t $IMAGE_NAME .
+      - snyk/scan:
+          docker-image-name: $IMAGE_NAME
+
+  codescan:
+    docker:
+      - image: cimg/node:16.10
+    environment:
+      IMAGE_NAME: clement7903/container-assignment:latest
+    steps:
+      - checkout
+      - setup_remote_docker
+      - docker/check
+      - run:
+          name: Build Docker Image
+          command: docker build -t $IMAGE_NAME .
+      - snyk/install
+      - run:
+          name: Run Snyk Code Test
+          command: snyk code test
 
   publish:
     # publish Steps
@@ -95,6 +128,20 @@ workflows:
                 - release
             tags:
               only: /^v\d+\.\d+\.\d+$/ # Semantic Versioning tags
+      - scan:
+          requires:
+            - build
+          context: snyk-credentials
+          filters:
+            branches:
+              only: main
+      - codescan:
+          requires:
+            - build
+          context: snyk-credentials
+          filters:
+            branches:
+              only: main
       - publish:
           requires:
             - test

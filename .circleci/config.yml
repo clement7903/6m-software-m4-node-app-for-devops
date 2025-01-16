@@ -131,14 +131,14 @@ workflows:
       - scan:
           requires:
             - build
-          context: snyk-credentials
+          context: docker-hub-credentials
           filters:
             branches:
               only: main
       - codescan:
           requires:
             - build
-          context: snyk-credentials
+          context: docker-hub-credentials
           filters:
             branches:
               only: main
